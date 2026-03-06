@@ -1,7 +1,7 @@
 import React from 'react'
 import NavBar from './Components/NavBar/NavBar'
 import './App.css'
-import {action, originals, horror, romance, comedy} from "../src/constants/urls"
+import {action, originals, horror, comedy} from "../src/constants/urls"
 import Banner from './Components/Banner/Banner'
 import RowPost from './Components/RowPost/RowPost'
 
