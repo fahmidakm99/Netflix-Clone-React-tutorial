@@ -81,18 +81,19 @@ import { API_KEY, imageUrl } from "../../constants/constants";
 
 function RowPost(props) {
   const [movies, setMovies] = useState([]);
-  const [trailerid, setTrailerid] = useState("");       
-  const [modalMovie, setModalMovie] = useState(null);    
-  const [showTrailer, setShowTrailer] = useState(false); 
-  const [modalTrailerId, setModalTrailerId] = useState(""); 
+  const [trailerid, setTrailerid] = useState("");
+  const [modalMovie, setModalMovie] = useState(null);
+  const [showTrailer, setShowTrailer] = useState(false);
+  const [modalTrailerId, setModalTrailerId] = useState("");
   const [cast, setCast] = useState([]);
   const [crew, setCrew] = useState([]);
   const [similarMovies, setSimilarMovies] = useState([]);
 
-    const scrollRef = useRef(null);
+  const scrollRef = useRef(null);
 
   useEffect(() => {
-    axios.get(props.url)
+    axios
+      .get(props.url)
       .then((response) => setMovies(response.data.results))
       .catch(() => setMovies([]));
   }, [props.url]);
@@ -100,7 +101,9 @@ function RowPost(props) {
   const fetchTrailer = async (movie) => {
     const mediaType = movie.media_type === "tv" ? "tv" : "movie";
     try {
-      const res = await axios.get(`/${mediaType}/${movie.id}/videos?api_key=${API_KEY}&language=en-US`);
+      const res = await axios.get(
+        `/${mediaType}/${movie.id}/videos?api_key=${API_KEY}&language=en-US`,
+      );
       if (res.data.results.length > 0) return res.data.results[0].key;
       return null;
     } catch (err) {
@@ -118,7 +121,8 @@ function RowPost(props) {
     setModalTrailerId(trailerKey || "");
 
     // Fetch Cast & Crew
-    axios.get(`/movie/${movie.id}/credits?api_key=${API_KEY}&language=en-US`)
+    axios
+      .get(`/movie/${movie.id}/credits?api_key=${API_KEY}&language=en-US`)
       .then((res) => {
         setCast(res.data.cast.slice(0, 5));
         setCrew(res.data.crew.slice(0, 3));
@@ -129,7 +133,8 @@ function RowPost(props) {
       });
 
     // Fetch Similar Movies
-    axios.get(`/movie/${movie.id}/similar?api_key=${API_KEY}&language=en-US`)
+    axios
+      .get(`/movie/${movie.id}/similar?api_key=${API_KEY}&language=en-US`)
       .then((res) => setSimilarMovies(res.data.results.slice(0, 8)))
       .catch(() => setSimilarMovies([]));
   };
@@ -150,19 +155,20 @@ function RowPost(props) {
     height: "100%",
     playerVars: { autoplay: 1 },
   };
-// Scroll row left or right
+  // Scroll row left or right
   const scroll = (direction) => {
     const width = scrollRef.current.clientWidth;
     scrollRef.current.scrollBy({ left: direction * width, behavior: "smooth" });
   };
 
-
   return (
- <div className="row">
+    <div className="row">
       <h2>{props.title}</h2>
 
       <div className="row-container">
-        <button className="nav-arrow left" onClick={() => scroll(-1)}>‹</button>
+        <button className="nav-arrow left" onClick={() => scroll(-1)}>
+          ‹
+        </button>
 
         <div className="posters" ref={scrollRef}>
           {movies.map((movie) => (
@@ -176,15 +182,23 @@ function RowPost(props) {
           ))}
         </div>
 
-        <button className="nav-arrow right" onClick={() => scroll(1)}>›</button>
+        <button className="nav-arrow right" onClick={() => scroll(1)}>
+          ›
+        </button>
       </div>
 
       {modalMovie && (
         <div className="modal">
           <div className="modal-content">
-            <button className="close-btn" onClick={() => setModalMovie(null)}>✖</button>
+            <button className="close-btn" onClick={() => setModalMovie(null)}>
+              ✖
+            </button>
 
-            <img className="modal-img" src={`${imageUrl}${modalMovie.backdrop_path}`} alt={modalMovie.title} />
+            <img
+              className="modal-img"
+              src={`${imageUrl}${modalMovie.backdrop_path}`}
+              alt={modalMovie.title}
+            />
             <h2>{modalMovie.title}</h2>
             <p className="overview">{modalMovie.overview}</p>
 
@@ -203,32 +217,39 @@ function RowPost(props) {
             )}
 
             {modalTrailerId && (
-              <button className="play-btn" onClick={() => playTrailer(modalTrailerId)}>▶ Play Trailer</button>
+              <button
+                className="play-btn"
+                onClick={() => playTrailer(modalTrailerId)}
+              >
+                ▶ Play Trailer
+              </button>
             )}
 
-           {similarMovies.length > 0 && (
-  <>
-    <h3 className="more-title">More Like This</h3>
-    <div className="similar-movies-grid">
-      {similarMovies.map((movie) => (
-        <div key={movie.id} className="similar-grid-item">
-          <img
-            src={`${imageUrl}${movie.poster_path}`}
-            alt={movie.title}
-            onClick={() => openModal(movie)}
-          />
-        </div>
-      ))}
-    </div>
-  </>
-)}
+            {similarMovies.length > 0 && (
+              <>
+                <h3 className="more-title">More Like This</h3>
+                <div className="similar-movies-grid">
+                  {similarMovies.map((movie) => (
+                    <div key={movie.id} className="similar-grid-item">
+                      <img
+                        src={`${imageUrl}${movie.poster_path}`}
+                        alt={movie.title}
+                        onClick={() => openModal(movie)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
 
       {showTrailer && trailerid && (
         <div className="trailer-overlay">
-          <button className="trailer-close" onClick={closeTrailer}>✖</button>
+          <button className="trailer-close" onClick={closeTrailer}>
+            ✖
+          </button>
           <div className="trailer-content">
             <YouTube videoId={trailerid} opts={opts} />
           </div>
