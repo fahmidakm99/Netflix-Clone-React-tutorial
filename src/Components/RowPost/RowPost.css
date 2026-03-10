@@ -189,3 +189,21 @@
 .nav-arrow.right {
   right: 0;
 }
+/* Similar movies grid (3 per row) */
+.similar-movies-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 posters per row */
+  gap: 20px; /* spacing between posters */
+  margin-top: 10px;
+}
+
+.similar-grid-item img {
+  width: 100%;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: transform 0.3s;
+}
+
+.similar-grid-item img:hover {
+  transform: scale(1.05);
+}

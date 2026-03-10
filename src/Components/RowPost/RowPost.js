@@ -206,22 +206,22 @@ function RowPost(props) {
               <button className="play-btn" onClick={() => playTrailer(modalTrailerId)}>▶ Play Trailer</button>
             )}
 
-            {similarMovies.length > 0 && (
-              <>
-                <h3 className="more-title">More Like This</h3>
-                <div className="similar-movies">
-                  {similarMovies.map((movie) => (
-                    <img
-                      key={movie.id}
-                      className="similar-poster"
-                      src={`${imageUrl}${movie.poster_path}`}
-                      alt={movie.title}
-                      onClick={() => openModal(movie)}
-                    />
-                  ))}
-                </div>
-              </>
-            )}
+           {similarMovies.length > 0 && (
+  <>
+    <h3 className="more-title">More Like This</h3>
+    <div className="similar-movies-grid">
+      {similarMovies.map((movie) => (
+        <div key={movie.id} className="similar-grid-item">
+          <img
+            src={`${imageUrl}${movie.poster_path}`}
+            alt={movie.title}
+            onClick={() => openModal(movie)}
+          />
+        </div>
+      ))}
+    </div>
+  </>
+)}
           </div>
         </div>
       )}
