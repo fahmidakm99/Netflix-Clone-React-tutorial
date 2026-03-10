@@ -73,7 +73,7 @@
 
 // export default RowPost;
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./RowPost.css";
 import YouTube from "react-youtube";
 import axios from "../axios";
@@ -88,6 +88,8 @@ function RowPost(props) {
   const [cast, setCast] = useState([]);
   const [crew, setCrew] = useState([]);
   const [similarMovies, setSimilarMovies] = useState([]);
+
+    const scrollRef = useRef(null);
 
   useEffect(() => {
     axios.get(props.url)
@@ -148,21 +150,33 @@ function RowPost(props) {
     height: "100%",
     playerVars: { autoplay: 1 },
   };
+// Scroll row left or right
+  const scroll = (direction) => {
+    const width = scrollRef.current.clientWidth;
+    scrollRef.current.scrollBy({ left: direction * width, behavior: "smooth" });
+  };
+
 
   return (
-    <div className="row">
+ <div className="row">
       <h2>{props.title}</h2>
 
-      <div className="posters">
-        {movies.map((movie) => (
-          <img
-            key={movie.id}
-            className={props.isSmall ? "small-poster" : "poster"}
-            src={`${imageUrl}${props.isSmall ? movie.poster_path : movie.backdrop_path}`}
-            alt={movie.title}
-            onClick={() => openModal(movie)}
-          />
-        ))}
+      <div className="row-container">
+        <button className="nav-arrow left" onClick={() => scroll(-1)}>‹</button>
+
+        <div className="posters" ref={scrollRef}>
+          {movies.map((movie) => (
+            <img
+              key={movie.id}
+              className={props.isSmall ? "small-poster" : "poster"}
+              src={`${imageUrl}${props.isSmall ? movie.poster_path : movie.backdrop_path}`}
+              alt={movie.title}
+              onClick={() => openModal(movie)}
+            />
+          ))}
+        </div>
+
+        <button className="nav-arrow right" onClick={() => scroll(1)}>›</button>
       </div>
 
       {modalMovie && (

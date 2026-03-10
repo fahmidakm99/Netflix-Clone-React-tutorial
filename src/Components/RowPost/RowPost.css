@@ -6,8 +6,10 @@
 .posters {
     display: flex;
     padding: 20px;
-    overflow-x: scroll;
-    overflow-y: hidden;
+    /* overflow-x: scroll;
+    overflow-y: hidden; */
+      overflow-x: auto;
+  scroll-behavior: smooth;
 }
 
 .posters::-webkit-scrollbar {
@@ -160,4 +162,29 @@
 
 .similar-poster:hover{
   transform:scale(1.1);
+}
+.row-container {
+  position: relative;
+}
+
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  font-size: 2rem;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 0 12px;
+  border-radius: 50%;
+}
+
+.nav-arrow.left {
+  left: 0;
+}
+
+.nav-arrow.right {
+  right: 0;
 }
